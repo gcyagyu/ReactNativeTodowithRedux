@@ -15,15 +15,15 @@ import {
   ScrollView,
   AsyncStorage,
 } from 'react-native';
-// import { createStore } from 'redux';
+import { createStore } from 'redux';
 
 import TodoList from './TodoList';
-// import reducer from './reducers/';
-// const store = createStore(reducer);
+import reducer from './reducers/';
+const store = createStore(reducer);
 
 type Props = {};
 export default class App extends Component<Props> {
-  // state = store.getState();
+  state = store.getState();
   // state = {
   //   newTodo: '',
   //   todos: [],
@@ -76,7 +76,7 @@ export default class App extends Component<Props> {
         <TextInput
           value="aa"
           style={styles.form}
-          onChangeText={ text => this.onChangeText(text)}
+          onChangeText={text => store.dispatch({type: 'CHANGE_TEXT', newTodo: text})}
         />
         <TouchableOpacity
           style={styles.addButton}
