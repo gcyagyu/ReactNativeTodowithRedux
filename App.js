@@ -16,10 +16,14 @@ import {
   AsyncStorage,
 } from 'react-native';
 import { createStore } from 'redux';
+import devToolsEnhancer from 'remote-redux-devtools';
 
 import TodoList from './TodoList';
 import reducer from './reducers/';
-const store = createStore(reducer);
+const store = createStore(
+  reducer,
+  devToolsEnhancer(),
+)
 
 type Props = {};
 export default class App extends Component<Props> {
