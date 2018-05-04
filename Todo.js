@@ -17,6 +17,7 @@ import {
   AsyncStorage,
 } from 'react-native';
 
+import { changeText } from './actions'
 import TodoList from './TodoList';
 
 type Props = {};
@@ -98,7 +99,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  onChangeText: text => dispatch({ type: 'CHANGE_TEXT', newTodo: text })
+  onChangeText: text => dispatch(changeText(text))
 })
 
 export default connect(
