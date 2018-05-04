@@ -6,7 +6,7 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { lifecycle } from 'recompose';
+import { lifecycle, withHandlers } from 'recompose';
 import {bindActionCreators} from 'redux';
 import {
   Platform,
@@ -25,14 +25,14 @@ import TodoList from './TodoList';
 type Props = {};
 class Todo extends Component<Props> {
 
-  onPressAdd() {
-    this.props.addtodo(this.props.todos.newTodo, this.props.todos.todos)
-      // 1. stringの配列をJSON文字列に変換する。
-    const str = JSON.stringify(this.props.todos.todos);
-      // 2. キーをtodosにして、保存する！
-      // Todo: 登録した直後のtodoはstorageに反映できないので対応する必要あり。
-    this.props.storetodo(str);
-  }
+  // onPressAdd() {
+  //   this.props.addtodo(this.props.todos.newTodo, this.props.todos.todos)
+  //     // 1. stringの配列をJSON文字列に変換する。
+  //   const str = JSON.stringify(this.props.todos.todos);
+  //     // 2. キーをtodosにして、保存する！
+  //     // Todo: 登録した直後のtodoはstorageに反映できないので対応する必要あり。
+  //   this.props.storetodo(str);
+  // }
 
   onPressDelete(index) {
     const filtered_todo = this.props.todos.todos.filter((t, i) => i !== index)
@@ -52,7 +52,7 @@ class Todo extends Component<Props> {
         />
         <TouchableOpacity
           style={styles.addButton}
-          onPress={() => this.onPressAdd()}
+          onPress={() => this.props.onPressAdd()}
         >
           <Text style={styles.addButtonText}>ADD</Text>
         </TouchableOpacity>
@@ -76,6 +76,17 @@ const TodoLifeCycle = lifecycle({
   },
 })(Todo);
 
+const TodoWithHandlers = withHandlers({
+  onPressAdd: props => () =>  {
+    props.addtodo(props.todos.newTodo, props.todos.todos)
+      // 1. stringの配列をJSON文字列に変換する。
+    const str = JSON.stringify(props.todos.todos);
+      // 2. キーをtodosにして、保存する！
+      // Todo: 登録した直後のtodoはstorageに反映できないので対応する必要あり。
+    props.storetodo(str);
+  },
+})(TodoLifeCycle)
+
 const mapStateToProps = state => {
  return {
    todos: state.todos,
@@ -93,7 +104,7 @@ const mapDispatchToProps = dispatch =>
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(TodoLifeCycle)
+)(TodoWithHandlers)
 
 const styles = StyleSheet.create({
   container: {
