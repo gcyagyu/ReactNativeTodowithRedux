@@ -23,53 +23,32 @@ import TodoList from './TodoList';
 
 type Props = {};
 class Todo extends Component<Props> {
-  // state = {
-  //   newTodo: '',
-  //   todos: [],
-  // }
-  //
-  // constructor(props) {
-  //   console.log(props);
-  //   super(props);
-  //   this.loadTodos();
-  // }
-  //
-  // onChangeText(newTodo) {
-  //   this.setState({ newTodo });
-  // }
-  //
-  // onPressAdd() {
-  //   const {newTodo} = this.state;
-  //   this.setState({
-  //     newTodo: '',
-  //     todos: [newTodo, ...this.state.todos],
-  //   }, () => this.storeTodos());
-  // }
-  //
+
+  componentWillMount() {
+    // 非同期なので、受け取り方が2種類ある。
+    // 第二引数にコールバック関数を設定 or 第二引数が設定されていない場合はPromiseが帰って来るようになっているのでPromiseで受け取るか？
+    AsyncStorage.getItem('todos').then((str) => {
+      const todos = str ? JSON.parse(str) : []
+      this.props.loadtodo(todos)
+    })
+  }
+
+
+  onPressAdd() {
+    this.props.addtodo(this.props.todos.newTodo, this.props.todos.todos)
+      // 1. stringの配列をJSON文字列に変換する。
+    const str = JSON.stringify(this.props.todos.todos);
+      // 2. キーをtodosにして、保存する！
+      // Todo: 登録した直後のtodoはstorageに反映できないので対応する必要あり。
+    this.props.storetodo(str);
+  }
+
   // onPressDelete(index) {
   //   this.setState({
   //     todos: this.state.todos.filter((t, i) => i !== index ),
   //   }, () => this.storeTodos());
   // }
-  //
-  // storeTodos() {
-  //   // 1. stringの配列をJSON文字列に変換する。
-  //   const str = JSON.stringify(this.state.todos);
-  //   // 2. キーをtodosにして、保存する！
-  //   AsyncStorage.setItem('todos', str);
-  // }
-  //
-  // loadTodos() {
-  //   // 非同期なので、受け取り方が2種類ある。
-  //   // 第二引数にコールバック関数を設定 or 第二引数が設定されていない場合はPromiseが帰って来るようになっているのでPromiseで受け取るか？
-  //   AsyncStorage.getItem('todos').then((str) => {
-  //     const todos = str ? JSON.parse(str): [];
-  //     this.setState({ todos });
-  //   })
-  // }
 
-// text => store.dispatch({type: 'CHANGE_TEXT', newTodo: text})
-// () => this.onPressAdd()
   render() {
     console.log(this.props);
     return (
@@ -81,7 +60,7 @@ class Todo extends Component<Props> {
         />
         <TouchableOpacity
           style={styles.addButton}
-          onPress={() => console.log(this.props) || this.props.addtodo(this.props.todos.newTodo, this.props.todos.todos)}
+          onPress={() => this.onPressAdd()}
         >
           <Text style={styles.addButtonText}>ADD</Text>
         </TouchableOpacity>

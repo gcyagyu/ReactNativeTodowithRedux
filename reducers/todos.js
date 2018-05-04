@@ -8,6 +8,12 @@ const todos = handleActions(
     },
     [Actions.todos.addtodo] (state, action) {
       return Object.assign({}, state, action.payload)
+    },
+    [Actions.todos.storetodo] (state, action) {
+      return state
+    },
+    [Actions.todos.loadtodo] (state, action) {
+      return Object.assign({}, state, action.payload)
     }
   },
   {todos: [], newTodo: "New Todo"}
