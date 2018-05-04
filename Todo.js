@@ -6,6 +6,7 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import {bindActionCreators} from 'redux';
 import {
   Platform,
   StyleSheet,
@@ -70,16 +71,17 @@ class Todo extends Component<Props> {
 // text => store.dispatch({type: 'CHANGE_TEXT', newTodo: text})
 // () => this.onPressAdd()
   render() {
+    console.log(this.props);
     return (
       <View style={styles.container}>
         <TextInput
           value={this.props.todos.newTodo}
           style={styles.form}
-          onChangeText={(text) => this.props.onChangeText(text)}
+          onChangeText={(text) => this.props.changetext(text)}
         />
         <TouchableOpacity
           style={styles.addButton}
-          onPress={() => console.log(this.props) || this.props.onAddTodo(this.props.todos.newTodo, this.props.todos.todos)}
+          onPress={() => console.log(this.props) || this.props.addtodo(this.props.todos.newTodo, this.props.todos.todos)}
         >
           <Text style={styles.addButtonText}>ADD</Text>
         </TouchableOpacity>
@@ -98,10 +100,13 @@ const mapStateToProps = state => {
  }
 };
 
-const mapDispatchToProps = dispatch => ({
-  onChangeText: text => dispatch(Actions.todos.changetext(text)),
-  onAddTodo: (text, oldTodos) => dispatch(Actions.todos.addtodo(text, oldTodos))
-})
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      ...Actions.todos
+    },
+    dispatch,
+)
 
 export default connect(
   mapStateToProps,
