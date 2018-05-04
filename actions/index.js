@@ -1,4 +1,7 @@
-export const changeText = text => ({
-  type: 'CHANGE_TEXT',
-  newTodo: text
+import {createActions} from 'redux-actions'
+
+export default createActions({
+  TODOS: {
+    CHANGETEXT: (text) => ({newTodo: text})
+  }
 })

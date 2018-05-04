@@ -1,7 +1,8 @@
 const todos = (state = {todos: [], newTodo: 'New TODO'}, action) => {
+  console.log(action)
   switch (action.type) {
-    case 'CHANGE_TEXT':
-      return Object.assign({}, state, {newTodo: action.newTodo})
+    case 'TODOS/CHANGETEXT':
+      return Object.assign({}, state, action.payload)
     default:
       return state
   }

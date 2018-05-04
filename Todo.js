@@ -17,7 +17,7 @@ import {
   AsyncStorage,
 } from 'react-native';
 
-import { changeText } from './actions'
+import Actions from './actions/'
 import TodoList from './TodoList';
 
 type Props = {};
@@ -74,6 +74,7 @@ class Todo extends Component<Props> {
 //   onPress={() => console.log("ssss");}
 // />
   render() {
+    console.log(Actions);
     return (
       <View style={styles.container}>
         <TextInput
@@ -99,7 +100,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  onChangeText: text => dispatch(changeText(text))
+  onChangeText: text => dispatch(Actions.todos.changetext(text))
 })
 
 export default connect(
