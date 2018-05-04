@@ -24,13 +24,6 @@ import TodoList from './TodoList';
 
 type Props = {};
 class Todo extends Component<Props> {
-  
-  onPressDelete(index) {
-    const filtered_todo = this.props.todos.todos.filter((t, i) => i !== index)
-    this.props.deletetodo(filtered_todo)
-    const str = JSON.stringify(this.props.todos.todos);
-    this.props.storetodo(str);
-  }
 
   render() {
     console.log(this.props);
@@ -49,7 +42,7 @@ class Todo extends Component<Props> {
         </TouchableOpacity>
         <TodoList
           todos={this.props.todos.todos}
-          onPressDelete={(index) => this.onPressDelete(index)}
+          onPressDelete={(index) => this.props.onPressDelete(index)}
         />
       </View>
     );
@@ -76,6 +69,14 @@ const TodoWithHandlers = withHandlers({
       // Todo: 登録した直後のtodoはstorageに反映できないので対応する必要あり。
     props.storetodo(str);
   },
+
+  onPressDelete: (props) => (index) => {
+    console.log(props, index);
+    const filtered_todo = props.todos.todos.filter((t, i) => i !== index)
+    props.deletetodo(filtered_todo)
+    const str = JSON.stringify(props.todos.todos);
+    props.storetodo(str);
+  }
 })(TodoLifeCycle)
 
 const mapStateToProps = state => {
