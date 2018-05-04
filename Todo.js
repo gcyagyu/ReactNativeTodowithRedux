@@ -76,6 +76,7 @@ class Todo extends Component<Props> {
     return (
       <View style={styles.container}>
         <TextInput
+          value={this.props.newTodo}
           style={styles.form}
           onChangeText={(text) => this.props.onChangeText(text)}
         />
@@ -92,8 +93,7 @@ class Todo extends Component<Props> {
 
 const mapStateToProps = state => {
  return {
-   newTodo: state.newTodo,
-   todos: state.todos
+   todos: state.todos,
  }
 };
 
