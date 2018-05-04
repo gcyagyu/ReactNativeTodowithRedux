@@ -14,6 +14,9 @@ const todos = handleActions(
     },
     [Actions.todos.loadtodo] (state, action) {
       return Object.assign({}, state, action.payload)
+    },
+    [Actions.todos.deletetodo] (state, action) {
+      return Object.assign({}, state, action.payload)
     }
   },
   {todos: [], newTodo: "New Todo"}

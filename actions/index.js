@@ -7,5 +7,6 @@ export default createActions({
     CHANGETEXT: (text) => ({newTodo: text}),
     ADDTODO: (text, oldTodos) => ({newTodo: '', todos: [text, ...oldTodos]}),
     STORETODO: (todos) => (AsyncStorage.setItem('todos', todos)),
-    LOADTODO: (todos) => ({ todos })
+    LOADTODO: (todos) => ({ todos }),
+    DELETETODO: (todos) => ({todos})
   }})

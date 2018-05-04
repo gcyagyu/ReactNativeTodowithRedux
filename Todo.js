@@ -43,11 +43,12 @@ class Todo extends Component<Props> {
     this.props.storetodo(str);
   }
 
-  // onPressDelete(index) {
-  //   this.setState({
-  //     todos: this.state.todos.filter((t, i) => i !== index ),
-  //   }, () => this.storeTodos());
-  // }
+  onPressDelete(index) {
+    const filtered_todo = this.props.todos.todos.filter((t, i) => i !== index)
+    this.props.deletetodo(filtered_todo)
+    const str = JSON.stringify(this.props.todos.todos);
+    this.props.storetodo(str);
+  }
 
   render() {
     console.log(this.props);
@@ -66,7 +67,7 @@ class Todo extends Component<Props> {
         </TouchableOpacity>
         <TodoList
           todos={this.props.todos.todos}
-          onPress={() => console.log(this.props)}
+          onPressDelete={(index) => this.onPressDelete(index)}
         />
       </View>
     );
