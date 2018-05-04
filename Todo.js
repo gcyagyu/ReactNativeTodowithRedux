@@ -6,6 +6,7 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { lifecycle } from 'recompose';
 import {bindActionCreators} from 'redux';
 import {
   Platform,
@@ -23,16 +24,6 @@ import TodoList from './TodoList';
 
 type Props = {};
 class Todo extends Component<Props> {
-
-  componentWillMount() {
-    // 非同期なので、受け取り方が2種類ある。
-    // 第二引数にコールバック関数を設定 or 第二引数が設定されていない場合はPromiseが帰って来るようになっているのでPromiseで受け取るか？
-    AsyncStorage.getItem('todos').then((str) => {
-      const todos = str ? JSON.parse(str) : []
-      this.props.loadtodo(todos)
-    })
-  }
-
 
   onPressAdd() {
     this.props.addtodo(this.props.todos.newTodo, this.props.todos.todos)
@@ -74,6 +65,17 @@ class Todo extends Component<Props> {
   }
 }
 
+const TodoLifeCycle = lifecycle({
+    componentWillMount() {
+    // 非同期なので、受け取り方が2種類ある。
+    // 第二引数にコールバック関数を設定 or 第二引数が設定されていない場合はPromiseが帰って来るようになっているのでPromiseで受け取るか？
+    AsyncStorage.getItem('todos').then((str) => {
+      const todos = str ? JSON.parse(str) : []
+      this.props.loadtodo(todos)
+    })
+  },
+})(Todo);
+
 const mapStateToProps = state => {
  return {
    todos: state.todos,
@@ -91,7 +93,7 @@ const mapDispatchToProps = dispatch =>
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Todo)
+)(TodoLifeCycle)
 
 const styles = StyleSheet.create({
   container: {
