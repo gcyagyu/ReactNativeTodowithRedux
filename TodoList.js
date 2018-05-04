@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
 export default (props) => (
   <ScrollView style={styles.scrollView}>
     {
-      [1,2].map((todo, index) => (
+      props.todos.map((todo, index) => (
         <View key={todo+index} style={styles.todoContainer}>
           <Text>{todo}</Text>
           <TouchableOpacity onPress={() => props.onPressDelete(index)}>

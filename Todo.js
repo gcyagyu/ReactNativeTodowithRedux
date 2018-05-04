@@ -69,12 +69,7 @@ class Todo extends Component<Props> {
 
 // text => store.dispatch({type: 'CHANGE_TEXT', newTodo: text})
 // () => this.onPressAdd()
-// <TodoList
-//   todos="ss"
-//   onPress={() => console.log("ssss");}
-// />
   render() {
-    console.log(Actions);
     return (
       <View style={styles.container}>
         <TextInput
@@ -84,10 +79,14 @@ class Todo extends Component<Props> {
         />
         <TouchableOpacity
           style={styles.addButton}
-          onPress={() => console.log(this.props)}
+          onPress={() => console.log(this.props) || this.props.onAddTodo(this.props.todos.newTodo, this.props.todos.todos)}
         >
           <Text style={styles.addButtonText}>ADD</Text>
         </TouchableOpacity>
+        <TodoList
+          todos={this.props.todos.todos}
+          onPress={() => console.log(this.props)}
+        />
       </View>
     );
   }
@@ -100,7 +99,8 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  onChangeText: text => dispatch(Actions.todos.changetext(text))
+  onChangeText: text => dispatch(Actions.todos.changetext(text)),
+  onAddTodo: (text, oldTodos) => dispatch(Actions.todos.addtodo(text, oldTodos))
 })
 
 export default connect(
