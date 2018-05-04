@@ -24,16 +24,7 @@ import TodoList from './TodoList';
 
 type Props = {};
 class Todo extends Component<Props> {
-
-  // onPressAdd() {
-  //   this.props.addtodo(this.props.todos.newTodo, this.props.todos.todos)
-  //     // 1. stringの配列をJSON文字列に変換する。
-  //   const str = JSON.stringify(this.props.todos.todos);
-  //     // 2. キーをtodosにして、保存する！
-  //     // Todo: 登録した直後のtodoはstorageに反映できないので対応する必要あり。
-  //   this.props.storetodo(str);
-  // }
-
+  
   onPressDelete(index) {
     const filtered_todo = this.props.todos.todos.filter((t, i) => i !== index)
     this.props.deletetodo(filtered_todo)
