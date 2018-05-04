@@ -17,7 +17,7 @@ import {
 } from 'react-native';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import reducer from './reducers/';
+import reducer from '../reducers/';
 import devToolsEnhancer from 'remote-redux-devtools';
 
 import Todo from './Todo';

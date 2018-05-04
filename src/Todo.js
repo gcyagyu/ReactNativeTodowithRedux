@@ -19,7 +19,7 @@ import {
   AsyncStorage,
 } from 'react-native';
 
-import Actions from './actions/'
+import Actions from '../actions/'
 import TodoList from './TodoList';
 
 type Props = {
