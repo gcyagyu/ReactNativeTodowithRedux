@@ -6,7 +6,7 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { lifecycle, withHandlers } from 'recompose';
+import { compose, lifecycle, withHandlers } from 'recompose';
 import {bindActionCreators} from 'redux';
 import {
   Platform,
@@ -22,62 +22,42 @@ import {
 import Actions from './actions/'
 import TodoList from './TodoList';
 
-type Props = {};
-class Todo extends Component<Props> {
+type Props = {
+  addtodo: func
+};
 
-  render() {
-    console.log(this.props);
+function Todo(props: Props) {
+  const {
+    addtodo,
+    changetext,
+    deletetodo,
+    loadtodo,
+    onPressAdd,
+    onPressDelete,
+    storetodo,
+    todos
+  } = props;
+
     return (
       <View style={styles.container}>
         <TextInput
-          value={this.props.todos.newTodo}
+          value={todos.newTodo}
           style={styles.form}
-          onChangeText={(text) => this.props.changetext(text)}
+          onChangeText={(text) => changetext(text)}
         />
         <TouchableOpacity
           style={styles.addButton}
-          onPress={() => this.props.onPressAdd()}
+          onPress={() => onPressAdd()}
         >
           <Text style={styles.addButtonText}>ADD</Text>
         </TouchableOpacity>
         <TodoList
-          todos={this.props.todos.todos}
-          onPressDelete={(index) => this.props.onPressDelete(index)}
+          todos={todos.todos}
+          onPressDelete={(index) => onPressDelete(index)}
         />
       </View>
     );
-  }
 }
-
-const TodoLifeCycle = lifecycle({
-    componentWillMount() {
-    // 非同期なので、受け取り方が2種類ある。
-    // 第二引数にコールバック関数を設定 or 第二引数が設定されていない場合はPromiseが帰って来るようになっているのでPromiseで受け取るか？
-    AsyncStorage.getItem('todos').then((str) => {
-      const todos = str ? JSON.parse(str) : []
-      this.props.loadtodo(todos)
-    })
-  },
-})(Todo);
-
-const TodoWithHandlers = withHandlers({
-  onPressAdd: props => () =>  {
-    props.addtodo(props.todos.newTodo, props.todos.todos)
-      // 1. stringの配列をJSON文字列に変換する。
-    const str = JSON.stringify(props.todos.todos);
-      // 2. キーをtodosにして、保存する！
-      // Todo: 登録した直後のtodoはstorageに反映できないので対応する必要あり。
-    props.storetodo(str);
-  },
-
-  onPressDelete: (props) => (index) => {
-    console.log(props, index);
-    const filtered_todo = props.todos.todos.filter((t, i) => i !== index)
-    props.deletetodo(filtered_todo)
-    const str = JSON.stringify(props.todos.todos);
-    props.storetodo(str);
-  }
-})(TodoLifeCycle)
 
 const mapStateToProps = state => {
  return {
@@ -93,10 +73,42 @@ const mapDispatchToProps = dispatch =>
     dispatch,
 )
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TodoWithHandlers)
+const Enhance = compose(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  ),
+  lifecycle({
+    componentWillMount() {
+    // 非同期なので、受け取り方が2種類ある。
+    // 第二引数にコールバック関数を設定 or 第二引数が設定されていない場合はPromiseが帰って来るようになっているのでPromiseで受け取るか？
+    AsyncStorage.getItem('todos').then((str) => {
+      const todos = str ? JSON.parse(str) : []
+      this.props.loadtodo(todos)
+    })
+  }}),
+  withHandlers({
+    onPressAdd: props => () =>  {
+      console.log("with", props);
+      props.addtodo(props.todos.newTodo, props.todos.todos)
+        // 1. stringの配列をJSON文字列に変換する。
+      const str = JSON.stringify(props.todos.todos);
+        // 2. キーをtodosにして、保存する！
+        // Todo: 登録した直後のtodoはstorageに反映できないので対応する必要あり。
+      props.storetodo(str);
+    },
+
+    onPressDelete: (props) => (index) => {
+      console.log(props, index);
+      const filtered_todo = props.todos.todos.filter((t, i) => i !== index)
+      props.deletetodo(filtered_todo)
+      const str = JSON.stringify(props.todos.todos);
+      props.storetodo(str);
+    }
+  })
+)
+
+export default Enhance(Todo);
 
 const styles = StyleSheet.create({
   container: {
