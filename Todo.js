@@ -78,7 +78,7 @@ class Todo extends Component<Props> {
     return (
       <View style={styles.container}>
         <TextInput
-          value={this.props.newTodo}
+          value={this.props.todos.newTodo}
           style={styles.form}
           onChangeText={(text) => this.props.onChangeText(text)}
         />

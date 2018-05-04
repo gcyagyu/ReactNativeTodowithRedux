@@ -1,11 +1,13 @@
-const todos = (state = {todos: [], newTodo: 'New TODO'}, action) => {
-  console.log(action)
-  switch (action.type) {
-    case 'TODOS/CHANGETEXT':
+import Actions from '../actions/'
+import {handleActions} from 'redux-actions'
+
+const todos = handleActions(
+  {
+    [Actions.todos.changetext] (state, action) {
       return Object.assign({}, state, action.payload)
-    default:
-      return state
-  }
-}
+    }
+  },
+  {todos: [], newTodo: "New Todo"}
+)
 
 export default todos
